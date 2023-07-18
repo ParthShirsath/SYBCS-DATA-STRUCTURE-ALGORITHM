@@ -97,6 +97,56 @@ struct node * deletemid(struct node * head,int pos)
     free(temp1);
     return head;
 }
+struct node * insert(struct node *head,int num,int pos)
+{
+    int i;
+    struct node * newnode,*temp;
+    newnode=(struct node *)malloc(sizeof(struct node));
+    newnode->data=num;
+    if(pos==1)
+    {
+        newnode->next=head;
+        head=newnode;
+    }
+    else
+    {
+        for(i=1,temp=head;i<pos-1&&temp->next!=NULL;i++,temp=temp->next);
+        newnode->next=temp->next;
+        temp->next=newnode;
+    }
+    return head;
+}
+struct node * del(struct node *head,int pos)
+{
+    int i;
+    struct node *temp,*temp1;
+    if(pos==1)
+    {
+        temp=head;
+        head=head->next;
+        free(temp);
+    }
+    else
+    {
+        for(i=1,temp=head;i<(pos-1)&&temp->next!=NULL;i++,temp=temp->next);
+        temp1=temp->next;
+        temp->next=temp1->next;
+        free(temp1);
+    }
+    return head;
+}
+struct node * search(struct node *head,int num)
+{
+    struct node * temp;
+    for(temp=head;temp!=NULL;temp=temp->next)
+    {
+        if(temp->data==num)
+        {
+            return temp;
+        }
+    }
+    return NULL;
+}
 int main()
 {
     int ch,num,pos;
@@ -105,8 +155,9 @@ int main()
         printf("\n\nMENU:-\n1:-create linklist\n2:-insert at Begining");
         printf("\n3:-inset at End\n4:-insert at Mid");
         printf("\n5:-delete at start\n6:-delete at last");
-        printf("\n7:-delete at Mid\n8:-Display\n");
-        printf("ENter Choice=");
+        printf("\n7:-delete at Mid\n8:-insert at any position");
+        printf("\n9:-delete at any position\n10:-search for specific number\n");
+        printf("11:-display\nENter Choice=");
         scanf("%d",&ch);
         switch(ch)
         {
@@ -134,9 +185,26 @@ int main()
                    scanf("%d",&pos);
                    head=deletemid(head,pos);
                    break;
-            case 8:disp(head);
+            case 8:printf("\nEnter Number To Add");
+                   scanf("%d",&num);
+                   printf("\nEnter position");
+                   scanf("%d",&pos);
+                   insert(head,num,pos);
                    break;
-            default:printf("Invalid choice");
+            case 9:printf("\nEnter Position=");
+                   scanf("%d",&pos);
+                   head=del(head,pos);
+                   break;
+            case 10:printf("\nEnter Number To Search=");
+                    scanf("%d",&num);
+                    if(search(head,num)==NULL)
+                    printf("\nNumber Is Not Found......!");
+                    else
+                    printf("\nNumber Is Found......!");
+                    break;
+            case 11:disp(head);
+                   break;
+            default:printf("\n\aInvalid choice");
         }
-    }while(ch<9);
+    }while(ch<12);
 }
